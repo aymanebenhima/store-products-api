@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 
 // Import Routes
-const userRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
 
 // Config App
 const app = express();
@@ -19,10 +20,11 @@ mongoose.connect(process.env.DATABASE, {
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(expressValidator());
 
 // Routes Middleware
-app.use('/api/users', userRoutes);
+app.use('/api', authRoutes);
 
 // Config Port
 const port = process.env.PORT || 3000;
