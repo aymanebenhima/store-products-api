@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expressValidator = require('express-validator');
 
 // Import Routes
 const userRoutes = require('./routes/users');
@@ -15,6 +16,10 @@ mongoose.connect(process.env.DATABASE, {
     useUnifiedTopology: true
 }).then(() => console.log('Database connected ...'))
     .catch(() => console.error('Database not connected !'))
+
+// Middleware
+app.use(express.json());
+app.use(expressValidator());
 
 // Routes Middleware
 app.use('/api/users', userRoutes);
