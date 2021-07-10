@@ -1,31 +1,31 @@
 const Product = require("../models/product");
-const _ = require('lodash');
-const fs = require('fs')
-const Joi = require('joi');
+const _ = require("lodash");
+const fs = require("fs");
+const Joi = require("joi");
 
 const formidable = require("formidable");
 
 exports.createProduct = (req, res) => {
   let form = new formidable.IncomingForm();
-  
+
   form.keepExtensions = true;
 
   form.parse(req, (err, fields, files) => {
     if (err) {
       return res.status(400).json({
-        error: 'Image could not upload !'
-      })
+        error: "Image could not upload !",
+      });
     }
     let product = new Product(fields);
 
     if (files.photo) {
       if (files.photo.size > Math.pow(10, 6)) {
         return res.status(400).json({
-          error: 'Image should be less than 1 Mb in size'
-        })
+          error: "Image should be less than 1 Mb in size",
+        });
       }
-      product.photo.data = fs.readFileSync(files.photo.path)
-      product.photo.contentType = files.photo.type
+      product.photo.data = fs.readFileSync(files.photo.path);
+      product.photo.contentType = files.photo.type;
     }
 
     const schema = Joi.object({
@@ -34,14 +34,14 @@ exports.createProduct = (req, res) => {
       price: Joi.required(),
       quantity: Joi.required(),
       category: Joi.required(),
-    })
+    });
 
     const { error } = schema.validate(fields);
 
     if (error) {
       return res.status(400).json({
-        error: error.details[0].message
-      })
+        error: error.details[0].message,
+      });
     }
 
     product.save((err, product) => {
@@ -50,72 +50,70 @@ exports.createProduct = (req, res) => {
           error: "product not persist !",
         });
       }
-  
+
       res.json({
         product,
       });
     });
-  })
-
+  });
 };
 
 exports.productById = (req, res, next, id) => {
-
   Product.findById(id).exec((err, product) => {
     if (err || !product) {
       return res.status(404).json({
-        error: 'Product not found !'
-      })
+        error: "Product not found !",
+      });
     }
 
     req.product = product;
     next();
-  })
-}
+  });
+};
 
 exports.showProduct = (req, res) => {
   req.product.photo = undefined;
   res.json({
-    product: req.product
-  })
-}
+    product: req.product,
+  });
+};
 
 exports.removeProduct = (req, res) => {
-  let product = req.product
+  let product = req.product;
 
   product.remove((err, product) => {
     if (err) {
       return res.status(404).json({
-        error: 'Product not found !'
-      })
+        error: "Product not found !",
+      });
     }
-    res.status(204).json({})
-  })
-}
+    res.status(204).json({});
+  });
+};
 
 exports.updateProduct = (req, res) => {
   let form = new formidable.IncomingForm();
-  
+
   form.keepExtensions = true;
 
   form.parse(req, (err, fields, files) => {
     if (err) {
       return res.status(400).json({
-        error: 'Image could not upload !'
-      })
+        error: "Image could not upload !",
+      });
     }
     let product = req.product;
 
-    product = _.extend(product, fields)
+    product = _.extend(product, fields);
 
     if (files.photo) {
       if (files.photo.size > Math.pow(10, 6)) {
         return res.status(400).json({
-          error: 'Image should be less than 1 Mb in size'
-        })
+          error: "Image should be less than 1 Mb in size",
+        });
       }
-      product.photo.data = fs.readFileSync(files.photo.path)
-      product.photo.contentType = files.photo.type
+      product.photo.data = fs.readFileSync(files.photo.path);
+      product.photo.contentType = files.photo.type;
     }
 
     const schema = Joi.object({
@@ -124,14 +122,14 @@ exports.updateProduct = (req, res) => {
       price: Joi.required(),
       quantity: Joi.required(),
       category: Joi.required(),
-    })
+    });
 
     const { error } = schema.validate(fields);
 
     if (error) {
       return res.status(400).json({
-        error: error.details[0].message
-      })
+        error: error.details[0].message,
+      });
     }
 
     product.save((err, product) => {
@@ -140,11 +138,10 @@ exports.updateProduct = (req, res) => {
           error: "product not updated !",
         });
       }
-  
+
       res.json({
         product,
       });
     });
-  })
-
+  });
 };

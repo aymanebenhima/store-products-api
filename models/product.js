@@ -11,33 +11,33 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     description: {
-        type: String,
-        trim: true,
-        minlength: 20,
-        maxlength: 150,
-        required: true,
+      type: String,
+      trim: true,
+      minlength: 20,
+      maxlength: 150,
+      required: true,
     },
     price: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     quantity: {
-        type: Number
+      type: Number,
     },
     photo: {
-        data: Buffer,
-        contentType: String,
+      data: Buffer,
+      contentType: String,
     },
     category: {
-        type: ObjectId,
-        ref: 'Category',
-        required: true,
+      type: ObjectId,
+      ref: "Category",
+      required: true,
     },
     shipping: {
-        type: Boolean,
-        default: false,
-        required: false,
-    }
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   {
     timestamps: true,
