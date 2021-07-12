@@ -30,7 +30,7 @@ app.use(expressValidator());
 
 // Routes Middleware
 app.use("/api", authRoutes);
-app.use("/api", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes);
 
