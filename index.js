@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
@@ -25,6 +26,7 @@ mongoose
 
 // Middleware
 app.use(express.json());
+app.use(cors())
 app.use(cookieParser());
 app.use(expressValidator());
 
